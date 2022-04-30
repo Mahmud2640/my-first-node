@@ -21,12 +21,24 @@ const users = [
 ];
 
 app.get("/users", (req, res) => {
-  res.send(users);
+   console.log('query', req.query);
+   if (req.query.name) {
+     const search = req.query.name.toLowerCase();
+     const filteredUsers = users.filter(user => user.name.toLowerCase().includes(search));
+     res.send(filteredUsers);
+   }
+   else {
+      res.send(users);
+   }
+  
 });
 
 app.post("/user", (req, res) => {
   console.log(req.body);
-  res.send("post request");
+  const user = req.body;
+  user.id = users.length + 1;
+  users.push(user);
+  res.send(user);
 });
 
 app.get("/users/:id", (req, res) => {
